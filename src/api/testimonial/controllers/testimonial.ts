@@ -6,17 +6,20 @@
 
 // export default factories.createCoreController('api::testimonial.testimonial');
 
+import { factories } from "@strapi/strapi";
 
-import { factories } from '@strapi/strapi';
-
-export default factories.createCoreController('api::testimonial.testimonial', ({ strapi }) => ({
+export default factories.createCoreController("api::testimonial.testimonial", ({ strapi }) => ({
   async find(ctx) {
-    // Fetch all testimonials and include the Image field
-    const testimonials = await strapi.db.query('api::testimonial.testimonial').findMany({
-      populate: ['Image'], // Populating the Image field to include media details
+    // Fetch unique, published testimonials and include the Image field
+    const testimonials = await strapi.db.query("api::testimonial.testimonial").findMany({
+      where: { publishedAt: { $ne: null } }, // Only fetch published testimonials
+      populate: ["Image"], // Populate the Image field to include media details
     });
 
-    // Return the fetched testimonials with image details
+    // Log for debugging (optional)
+    console.log("Filtered Testimonials:", testimonials);
+
+    // Return the filtered testimonials
     return testimonials;
   },
 }));
