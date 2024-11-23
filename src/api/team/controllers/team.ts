@@ -21,18 +21,5 @@ export default factories.createCoreController("api::team.team", ({ strapi }) => 
 
     // Return the filtered team members
     return teams;
-  },
-
-  async findOne(ctx) {
-    const { id } = ctx.params;
-
-    // Fetch a single team member by ID and populate the image field
-    const team = await strapi.db.query("api::team.team").findOne({
-      where: { id: parseInt(id, 10), publishedAt: { $ne: null } },
-      populate: ["Image"], // Populate the 'image' field
-    });
-
-    // Return the team member data
-    return team;
-  },
+  }
 }));
